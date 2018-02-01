@@ -1,7 +1,7 @@
 # Image to ASCII
 
 Este programa recibe una imagen como entrada y la devuelve en formato ASCII,
-ya sea en una imagen o en un archivo de texto sin formato.
+ya sea en una imagen o en un archivo de texto plano.
 
 Los argumentos que permite son:
 
