@@ -33,3 +33,71 @@ Los argumentos que permite son:
 * **-h, --help**: Ayuda.
                         
 ## Ejemplos
+
+El unico argumento obligatorio para obtener una salida es -i INPUT, --input INPUT
+
+Imagen original: input.jpg
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/input.jpg)
+
+
+python ascii.py -i -o example1 input.jpg --size 30 30 --format BOTH: esto retorna la siguiente
+imagen y el archivo de texto example1.txt que esta en la carpeta TXT
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/example1.png)
+
+
+python ascii.py -i input.jpg --height 50 --format BOTH: esto retorna la siguiente
+imagen y el archivo de texto example2.txt que esta en la carpeta TXT
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/example2.png)
+
+
+
+
+python ascii.py -i Images/input.jpg --width 100 --format BOTH:esto retorna la siguiente
+imagen y el archivo de texto example3.txt que esta en la carpeta TXT
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/example3.png)
+
+python ascii.py -i Images/input.jpg -a: esto retorna la siguiente
+imagen y el archivo de texto example4.txt que esta en la carpeta TXT
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/example4.png)
+
+python ascii.py -i Images/input.jpg -a 50 --format BOTH: esto retorna la siguiente
+imagen y el archivo de texto example5.txt que esta en la carpeta TXT
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/example5.png)
+
+python ascii.py -i Images/input.jpg -a 50 -m --format BOTH: esto retorna la siguiente
+imagen y el archivo de texto example6.txt que esta en la carpeta TXT
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/example6.png)
+
+python ascii.py -i Images/input.jpg -a 50 -s -m --format BOTH: esto retorna la siguiente
+imagen y el archivo de texto example7.txt que esta en la carpeta TXT
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/example7.png)
+
+python ascii.py -i Images/input.jpg -a 50 -ss -m --format BOTH: esto retorna la siguiente
+imagen y el archivo de texto example8.txt que esta en la carpeta TXT
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/example8.png)
+
+
+
+Imagen original: input2.png
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/input2.png)
+
+
+python ascii.py -i Images/input2.png -a 30 --format BOTH: esto retorna la siguiente
+imagen y el archivo de texto sinuniform.txt que esta en la carpeta TXT
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/sinuniform.png)
+
+python ascii.py -i Images/input2.png -u -a 30 --format BOTH: esto retorna la siguiente
+imagen y el archivo de texto uniform.txt que esta en la carpeta TXT
+
+![](https://github.com/Luispapiernik/Divertimentos/blob/master/ascii2png/Images/uniform.png)
