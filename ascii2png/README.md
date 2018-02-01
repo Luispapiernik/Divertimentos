@@ -5,7 +5,7 @@ ya sea en una imagen o en un archivo de texto sin formato.
 
 Los argumentos que permite son:
 
-* **-i INPUT o --input INPUT**: INPUT indica la imagen de entrada.
+* **-i INPUT, --input INPUT**: INPUT indica la imagen de entrada.
 * **-o OUTPUT, --output OUTPUT**: OUTPUT indica el nombre del archivo de salidad
 * **--format PNG/TXT/BOTH**: PNG indica salida en imagen, TXT en texto plano y 
     BOTH es para salida en ambos formatos.
