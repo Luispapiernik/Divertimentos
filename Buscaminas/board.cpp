@@ -120,11 +120,19 @@ void Board::pickEmpty(int x, int y){
 int Board::pickPosition(int x, int y, short option){
     int row = x - 1;
     int column = y - 1;
+    int state = m_logic_board[row][column];
 
     if(m_board[row][column] == 0 && option == 1)
+        state = 1;
         pickEmpty(row, column);
 
-    m_logic_board[row][column] = option;
+    if(m_logic_board[row][column] == 0)
+        state = option;
+
+    if(m_logic_board[row][column] == 2 && option == 2)
+        state = 0;
+
+    m_logic_board[row][column] = state;
 
     return m_board[row][column];
 }
@@ -137,7 +145,6 @@ void Board::pickAll(){
         }
     }
 }
-
 
 
 void Board::refresh(){
