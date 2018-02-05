@@ -83,31 +83,35 @@ Board::~Board(){
 
 
 void Board::pickEmpty(int x, int y){
-    if(m_logic_board[x][y] != 2 && m_board[x][y] != -1){
+    if(m_logic_board[x][y] == 0 && m_board[x][y] != -1){
         m_logic_board[x][y] = 1;
 
         if(x - 1 >= 0){
-            m_logic_board[x - 1][y] = 1;
             if(m_board[x - 1][y] == 0)
                 pickEmpty(x - 1, y);
+            else
+                m_logic_board[x - 1][y] = 1;
         }
 
         if(y - 1 >= 0){
-            m_logic_board[x][y - 1] = 1;
             if(m_board[x][y - 1] == 0)
                 pickEmpty(x, y - 1);
+            else
+                m_logic_board[x][y - 1] = 1;
         }
 
         if(x + 1 < m_height){
-            m_logic_board[x + 1][y] = 1;
             if(m_board[x + 1][y] == 0)
                 pickEmpty(x + 1, y);
+            else
+                m_logic_board[x + 1][y] = 1;
         }
 
         if(y + 1 < m_width){
-            m_logic_board[x][y + 1] = 1;
             if(m_board[x][y + 1] == 0)
                 pickEmpty(x, y + 1);
+            else
+                m_logic_board[x][y + 1] = 1;
         }
     }
 }
