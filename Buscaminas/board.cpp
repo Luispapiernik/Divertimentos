@@ -6,8 +6,8 @@
 
 void Board::enumerate(){
     int neighbor(0);
-    for (int i = 0; i < m_width; ++i){
-        for (int j = 0; j < m_height; ++j){
+    for (int i = 0; i < m_height; ++i){
+        for (int j = 0; j < m_width; ++j){
             neighbor = 0;
             if (m_board[i][j] == -1)
                 continue;
@@ -15,17 +15,17 @@ void Board::enumerate(){
                 ++neighbor;
             if (i - 1 >= 0 && m_board[i - 1][j] == -1)
                 ++neighbor;
-            if (i - 1 >= 0 && j + 1 < m_height && m_board[i - 1][j + 1] == -1)
+            if (i - 1 >= 0 && j + 1 < m_width && m_board[i - 1][j + 1] == -1)
                 ++neighbor;
             if (j - 1 >= 0 && m_board[i][j - 1] == -1)
                 ++neighbor;
-            if (j + 1 < m_height && m_board[i][j + 1] == -1)
+            if (j + 1 < m_width && m_board[i][j + 1] == -1)
                 ++neighbor;
-            if (i + 1 < m_width && j - 1 > 0 && m_board[i + 1][j - 1] == -1)
+            if (i + 1 < m_height && j - 1 >= 0 && m_board[i + 1][j - 1] == -1)
                 ++neighbor;
-            if (i + 1 < m_width && m_board[i + 1][j] == -1)
+            if (i + 1 < m_height && m_board[i + 1][j] == -1)
                 ++neighbor;
-            if (i + 1 < m_width && j + 1 < m_height && m_board[i + 1][j + 1] == -1)
+            if (i + 1 < m_height && j + 1 < m_width && m_board[i + 1][j + 1] == -1)
                 ++neighbor;
             m_board[i][j] = neighbor;
         }
@@ -38,12 +38,13 @@ void Board::init(){
     int row, column;
 
     while(mines){
-        row = rand() % m_width;
-        column = rand() % m_height;
+        row = rand() % m_height;
+        column = rand() % m_width;
 
-        if(m_board[row][column] != -1)
+        if(m_board[row][column] != -1){
             m_board[row][column] = -1;
             --mines;
+        }
     }
 
     enumerate();
@@ -97,13 +98,13 @@ void Board::pickEmpty(int x, int y){
                 pickEmpty(x, y - 1);
         }
 
-        if(x + 1 < m_width){
+        if(x + 1 < m_height){
             m_logic_board[x + 1][y] = 1;
             if(m_board[x + 1][y] == 0)
                 pickEmpty(x + 1, y);
         }
 
-        if(y + 1 < m_height){
+        if(y + 1 < m_width){
             m_logic_board[x][y + 1] = 1;
             if(m_board[x][y + 1] == 0)
                 pickEmpty(x, y + 1);
@@ -126,8 +127,8 @@ int Board::pickPosition(int x, int y, short option){
 
 
 void Board::pickAll(){
-    for (int i = 0; i < m_width; ++i){
-        for (int j = 0; j < m_height; ++j){
+    for (int i = 0; i < m_height; ++i){
+        for (int j = 0; j < m_width; ++j){
             m_logic_board[i][j] = 1;
         }
     }

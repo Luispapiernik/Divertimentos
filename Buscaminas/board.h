@@ -2,7 +2,6 @@
 #define BOARD_H
 
 #include <curses.h>
-#include "io.h"
 
 
 class Board{
