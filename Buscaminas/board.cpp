@@ -58,6 +58,7 @@ Board::Board(int posx, int posy, int width, int height, int mines):
 
     // inicializacion de elementos relacionados con curses
     m_win = newwin(m_height + 2, m_width + 2, m_posx, m_posy);
+    m_info_win = newwin(7, 17, 0, 0);
 
     m_logic_board = new short*[m_height];
     m_board = new short*[m_height];
@@ -85,32 +86,33 @@ Board::~Board(){
 void Board::pickEmpty(int x, int y){
     if(m_logic_board[x][y] == 0 && m_board[x][y] != -1){
         m_logic_board[x][y] = 1;
+        ++m_num_picked;
 
         if(x - 1 >= 0){
             if(m_board[x - 1][y] == 0)
                 pickEmpty(x - 1, y);
-            else
+            if(m_board[x - 1][y] != -1 && m_logic_board[x - 1][y] != 2)
                 m_logic_board[x - 1][y] = 1;
         }
 
         if(y - 1 >= 0){
             if(m_board[x][y - 1] == 0)
                 pickEmpty(x, y - 1);
-            else
+            if(m_board[x][y - 1] != -1 && m_logic_board[x][y - 1] != 2)
                 m_logic_board[x][y - 1] = 1;
         }
 
         if(x + 1 < m_height){
             if(m_board[x + 1][y] == 0)
                 pickEmpty(x + 1, y);
-            else
+            if(m_board[x + 1][y] != -1 && m_logic_board[x + 1][y] != 2)
                 m_logic_board[x + 1][y] = 1;
         }
 
         if(y + 1 < m_width){
             if(m_board[x][y + 1] == 0)
                 pickEmpty(x, y + 1);
-            else
+            if(m_board[x][y + 1] != -1 && m_logic_board[x][y + 1] != 2)
                 m_logic_board[x][y + 1] = 1;
         }
     }
@@ -120,19 +122,25 @@ void Board::pickEmpty(int x, int y){
 int Board::pickPosition(int x, int y, short option){
     int row = x - 1;
     int column = y - 1;
-    int state = m_logic_board[row][column];
 
-    if(m_board[row][column] == 0 && option == 1)
-        state = 1;
-        pickEmpty(row, column);
+    if(option == 2 && m_logic_board[row][column] != 1){
+        m_logic_board[row][column] = m_logic_board[row][column] == 2 ? 0 : 2;
 
-    if(m_logic_board[row][column] == 0)
-        state = option;
+        if(m_logic_board[row][column] == 2)
+            ++m_num_flags;
+        else
+            --m_num_flags;
 
-    if(m_logic_board[row][column] == 2 && option == 2)
-        state = 0;
-
-    m_logic_board[row][column] = state;
+        return 1;
+    }else{
+        if(m_board[row][column] == 0 && m_logic_board[row][column] == 0)
+            pickEmpty(row, column);
+        else{
+            if(m_logic_board[row][column] == 0)
+                ++m_num_picked;
+            m_logic_board[row][column] = (m_logic_board[row][column] != 2) && (m_board[row][column] != -1) ? 1 : 2;
+        }
+    }
 
     return m_board[row][column];
 }
@@ -147,7 +155,7 @@ void Board::pickAll(){
 }
 
 
-void Board::refresh(){
+void Board::refresh_board(){
     box(m_win, 0, 0);
     for (int i = 0; i < m_height; ++i){
         for (int j = 0; j < m_width; ++j){
@@ -162,11 +170,26 @@ void Board::refresh(){
 }
 
 
-void Board::loop(){
-    int ch, column(1), row(1), lose(1);
+void Board::refresh_info(){
+    box(m_info_win, 0, 0);
+    mvwprintw(m_info_win, 1, 1, "Cells: %d", m_width * m_height);
+    mvwprintw(m_info_win, 2, 1, "Picked: %d", m_num_picked);
+    mvwprintw(m_info_win, 3, 1, "Flags: %d", m_num_flags);
+    mvwprintw(m_info_win, 4, 1, "Mines: %d", m_mines);
+    mvwprintw(m_info_win, 5, 1, "Percent: %.2f", 100.0 * m_num_picked / (m_width * m_height));
+}
 
+
+int Board::loop(){
     keypad(m_win, TRUE);
-    refresh();
+
+    refresh_board();
+    refresh_info();
+
+    wrefresh(m_win);
+    wrefresh(m_info_win);
+
+    int ch, column(1), row(1), lose(1);
 
     wmove(m_win, 1, 1);
 
@@ -182,23 +205,31 @@ void Board::loop(){
             case KEY_LEFT: column > 1 ? wmove(m_win, row, --column) : 1;
         }
 
-        if(ch == 'm'){
+        if(ch == 'p'){
             lose = pickPosition(row, column);
-            refresh();
+            refresh_board();
         }
 
         if(ch == 'f'){
             lose = pickPosition(row, column, 2);
-            refresh();
+            refresh_board();
         }
 
         if(lose == -1){
             pickAll();
-            refresh();
+            refresh_board();
+            ch = wgetch(m_win);
+            return -1;
         }
 
-        wmove(m_win, row, column);
+        if(m_width * m_height - m_num_picked == m_mines)
+            return 1;
+
+        refresh_info();
 
         wrefresh(m_win);
+        wrefresh(m_info_win);
+
+        wmove(m_win, row, column);
     }
 }
