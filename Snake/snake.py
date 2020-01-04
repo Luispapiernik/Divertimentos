@@ -20,9 +20,9 @@ class Snake(System):
         self.baseMatrix = matrix
 
         super(Snake, self).__init__(matrix, colors=colors, name='Snake',
-                                    clear=False, export=False, add=add)
+                                    clear=False, export=True, add=add)
 
-        self.event['keyDown'].append(self.keyDown)
+        self.event['keyDown'].append(self.__keyDown)
         self.gameover = False
         self.pause = False
 
@@ -62,7 +62,7 @@ class Snake(System):
 
         return False
 
-    def keyDown(self, key):
+    def __keyDown(self, key):
         if key == 'r':
             self.dir = (0, 0)
             self.pos = deque([(randint(0, self.height - 1),
@@ -129,15 +129,12 @@ class Snake(System):
 def main():
     epilog = ''' Clasico juego Snake.
 
-El programa permite 2 modos de simulacion, el
-manual en el que se pasa al siguiente frame de simulacion mediante la pulsacion
-de la tecla SPACE y otro en el que se fija los frames por segundo, se puede
-pausar con la tecla p ademas se puede tomar una captura de pantalla con la
-tecla s, si se presiona la tecla c se limpia el tablero y si se presiona la
-tecla e la configuracion del tablero se guarda en un archivo de texto. Se
-permite tambien agregar celulas vivas presionando con el mouse a la celula. El
-programa tambien permite cargar configuraciones para el tablero desde un
-archivo de texto.
+El programa permite cargar un mapa desde un archivo de texto(donde 0
+representa que no hay nada en la celda y 3 representa un obstaculo), ademas se
+pueden agregar obstaculos en celda deseada haciendo click con el mouse.
+Mediante la pulsacion de la tecla SPACE o p se puede pausar el juego, ademas se
+puede tomar una captura de pantalla con la tecla s, y si se presiona la
+tecla e la configuracion del tablero se guarda en un archivo de texto.
 
 
 Los colores disponibles son:
@@ -175,12 +172,12 @@ Los colores disponibles son:
     parser.add_argument('-mh', '--margin-height', type=int, default=0,
                         help='largo de la margen vertical')
     parser.add_argument('-cw', '--cell-width', type=int, default=5,
-                        help='ancho horizontal de las celdas(celulas)')
+                        help='ancho horizontal de las celdas')
     parser.add_argument('-ch', '--cell-height', type=int, default=5,
-                        help='ancho vertical de las celdas(celulas)')
+                        help='ancho vertical de las celdas')
     parser.add_argument('-sbc', '--separation-between-cells', type=int,
                         default=1, dest='sbc',
-                        help='separacion entre las celdas(celulas)')
+                        help='separacion entre las celdas')
     parser.add_argument('-f', '--food', type=int, default=1,
                         help='cantidad de comida en el tablero')
     parser.add_argument('-bc', '--background-color', type=lambda x: x.upper(),
@@ -191,11 +188,11 @@ Los colores disponibles son:
     parser.add_argument('-cf', '--color-food', type=lambda x: x.upper(),
                         metavar='COLOR', default='GREEN',
                         choices=COLORS.keys(),
-                        help='color de celulas vivas')
+                        help='color de la comida')
     parser.add_argument('-cs', '--color-snake', type=lambda x: x.upper(),
                         metavar='COLOR', default='RED',
                         choices=COLORS.keys(),
-                        help='color celulas muertas')
+                        help='color de la culebrita')
     parser.add_argument('-cc', '--color-cell', type=lambda x: x.upper(),
                         metavar='COLOR', default='WHITE',
                         choices=COLORS.keys(),
@@ -212,9 +209,12 @@ Los colores disponibles son:
     snake = Snake(args.width, args.height, colors, food=args.food,
                   filename=args.filename)
 
-    game = CellGraph(snake, cellwidth=10, cellheight=10, fps=args.velocity,
-                     separation_between_cells=1,
-                     background_color=args.background_color)
+    game = CellGraph(snake, margin_width=args.margin_width,
+                     margin_height=args.margin_height,
+                     cellwidth=args.cell_width, cellheight=args.cell_height,
+                     separation_between_cells=args.sbc,
+                     background_color=args.background_color,
+                     fps=args.velocity)
 
     game.run(acceleration=args.acceleration)
 
